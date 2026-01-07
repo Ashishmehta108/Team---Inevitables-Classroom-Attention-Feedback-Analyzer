@@ -1,0 +1,136 @@
++-----------+        teaches        +-----------+
+|  TEACHER  | 1 ---------------- N |   CLASS   |
++-----------+                       +-----------+
+| teacher_id|                       | class_id  |
+| name      |                       | class_name|
+| email     |                       | subject   |
++-----------+                       | teacher_id|
+                                    +-----------+
+                                         |
+                                         | receives
+                                         | 1
+                                         |
+                                         | N
+                                   +-------------+
+                                   |  FEEDBACK   |
+                                   +-------------+
+                                   | feedback_id |
+                                   | understanding|
+                                   | comments    |
+                                   | class_id    |
+                                   +-------------+
+
+        +-----------+      enrolls      +------------------+
+        |  STUDENT  | 1 ------------ N | CLASS_ENROLLMENT |
+        +-----------+                  +------------------+
+        | student_id|                  | enrollment_id    |
+        | name      |                  | class_id         |
+        | email     |                  | student_id       |
+        +-----------+                  +------------------+
+        
+        
+//React (Frontend)
+   ↓ form data
+Node + Express (Backend API)
+   ↓ SQL query run
+MySQL Database
+
+
+
+
+---
+
+## 📌 Project Overview 
+
+**Project Title:** Classroom Attention & Feedback Analyzer (Ethical)
+
+This project is a web-based system designed to help teachers understand students’ learning levels without identifying individual students. The system allows students to submit real-time or post-class feedback about how well they understood a topic. The collected feedback is analyzed in aggregate form to show trends and overall understanding.
+
+The main goal of the project is to improve teaching effectiveness while maintaining student privacy. Teachers can adapt their teaching methods based on class-level insights instead of focusing on individual students. The system follows ethical principles by keeping feedback anonymous and showing only summarized results.
+
+The application is built using a MERN-style architecture:
+
+* **React** for the frontend user interface
+* **Node.js & Express.js** for backend APIs
+* **MySQL** as the relational database for structured and secure data storage
+
+---
+
+## 🎯 Key Features (Short)
+
+* Students give anonymous feedback
+* Teachers view class-level understanding trends
+* No student is singled out
+* Ethical and privacy-focused design
+* Scalable and structured backend database
+
+---
+
+## 🗄️ Database Overview (With Comment Lines)
+
+Below is the **database explanation written as comment lines**, exactly how teachers like to see it:
+
+```sql
+-- Teachers table stores information about instructors
+-- Each teacher can teach multiple classes
+TABLE teachers (
+    teacher_id PRIMARY KEY,
+    name,
+    email
+);
+
+-- Students table stores student information
+-- Student identity is not linked to feedback to ensure anonymity
+TABLE students (
+    student_id PRIMARY KEY,
+    name,
+    email
+);
+
+-- Classes table represents individual classes or subjects
+-- Each class is associated with one teacher
+TABLE classes (
+    class_id PRIMARY KEY,
+    class_name,
+    subject,
+    teacher_id FOREIGN KEY
+);
+
+-- Class_enrollments table manages many-to-many relationship
+-- It shows which students are enrolled in which classes
+TABLE class_enrollments (
+    enrollment_id PRIMARY KEY,
+    class_id FOREIGN KEY,
+    student_id FOREIGN KEY
+);
+
+-- Feedback table stores anonymous feedback for each class
+-- No student_id is stored to maintain ethical privacy
+TABLE feedback (
+    feedback_id PRIMARY KEY,
+    class_id FOREIGN KEY,
+    understanding_level,
+    comments,
+    feedback_time
+);
+
+-- Understanding_summary table stores analyzed results
+-- It contains average understanding and total responses per class
+TABLE understanding_summary (
+    summary_id PRIMARY KEY,
+    class_id FOREIGN KEY,
+    average_understanding,
+    total_responses,
+    generated_at
+);
+```
+
+---
+
+## 🧠 One-Line Database Explanation (Viva Ready)
+
+> “The database is designed to collect anonymous student feedback per class and generate summarized insights to help teachers improve instruction ethically.”
+
+
+
+
