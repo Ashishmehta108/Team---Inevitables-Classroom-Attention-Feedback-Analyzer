@@ -1,0 +1,38 @@
+{
+  "name": "classroom-attention-feedback-backend",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Node.js + Express backend for Classroom Attention & Feedback Analyzer",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "lint": "eslint .",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:seed": "node prisma/seed.js",
+    "pretest": "cross-env DATABASE_URL=file:./dev.test.db npx prisma db push --force-reset --skip-generate",
+    "test": "cross-env NODE_ENV=test DATABASE_URL=file:./dev.test.db jest --runInBand"
+  },
+  "dependencies": {
+    "@prisma/client": "5.11.0",
+    "bcryptjs": "2.4.3",
+    "cors": "2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "4.19.2",
+    "helmet": "7.1.0",
+    "jsonwebtoken": "9.0.2",
+    "nanoid": "5.0.4",
+    "socket.io": "4.7.5",
+    "zod": "3.22.4"
+  },
+  "devDependencies": {
+    "cross-env": "7.0.3",
+    "eslint": "8.57.0",
+    "jest": "29.7.0",
+    "nodemon": "3.1.4",
+    "prisma": "5.11.0",
+    "supertest": "6.3.4"
+  }
+}
