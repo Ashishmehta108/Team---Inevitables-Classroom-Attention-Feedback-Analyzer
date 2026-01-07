@@ -27,7 +27,7 @@ coverage/
 dist/
 lib/
 
-node_modules/
+/node_modules
 
 # Parcel / Next / Nuxt / Gatsby caches (optional)
 .cache/
