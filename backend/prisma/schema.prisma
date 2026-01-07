@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String            @id @default(uuid())
+  email          String?           @unique
+  passwordHash   String
+  name           String?
+  role           String
+  anonymousCode  String?           @unique
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  classesTaught  Class[]           @relation("TeacherClasses")
+  enrollments    ClassEnrollment[]
+  pollResponses  PollResponse[]
+  doubts         Doubt[]
+  feedbacks      Feedback[]
+  attendances    Attendance[]
+  bonuses        Bonus[]
+  reports        Report[]
+  polls Poll[]
+
+  @@index([role])
+  // @@check(role IN ("STUDENT","TEACHER","ADMIN"))
+  // @@check(role != "STUDENT" OR anonymousCode IS NOT NULL)
+}
+
+model Class {
+  id             String            @id @default(uuid())
+  name           String
+  subject        String
+  teacherId      String
+  teacher        User              @relation("TeacherClasses", fields: [teacherId], references: [id])
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  sessions       Session[]
+  enrollments    ClassEnrollment[]
+  reports        Report[]
+
+  @@index([teacherId])
+}
+
+model ClassEnrollment {
+  id        String   @id @default(uuid())
+  classId   String
+  studentId String
+  class     Class    @relation(fields: [classId], references: [id])
+  student   User     @relation(fields: [studentId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([classId, studentId])
+  @@index([studentId])
+}
+
+model Session {
+  id              String        @id @default(uuid())
+  classId         String
+  startsAt        DateTime
+  endsAt          DateTime?
+  attendanceClosesAt DateTime
+  class           Class         @relation(fields: [classId], references: [id])
+  attendance      Attendance[]
+  polls           Poll[]
+  doubts          Doubt[]
+  feedback        Feedback[]
+  reports         Report[]
+  createdAt       DateTime      @default(now())
+
+  @@index([classId])
+  bonuses Bonus[]
+}
+
+model Attendance {
+  id        String   @id @default(uuid())
+  sessionId String
+  studentId String
+  markedAt  DateTime @default(now())
+  session   Session  @relation(fields: [sessionId], references: [id])
+  student   User     @relation(fields: [studentId], references: [id])
+
+  @@unique([sessionId, studentId])
+  @@index([studentId])
+}
+
+model Poll {
+  id         String        @id @default(uuid())
+  sessionId  String
+  teacherId  String
+  question   String
+  isActive   Boolean       @default(true)
+  createdAt  DateTime      @default(now())
+  session    Session       @relation(fields: [sessionId], references: [id])
+  teacher    User          @relation(fields: [teacherId], references: [id])
+  options    PollOption[]
+  responses  PollResponse[]
+
+  @@unique([sessionId, isActive], map: "one_active_poll_per_session")
+}
+
+model PollOption {
+  id        String   @id @default(uuid())
+  pollId    String
+  text      String
+  poll      Poll     @relation(fields: [pollId], references: [id])
+  responses PollResponse[]
+}
+
+model PollResponse {
+  id         String   @id @default(uuid())
+  pollId     String
+  optionId   String
+  studentId  String
+  createdAt  DateTime @default(now())
+  poll       Poll     @relation(fields: [pollId], references: [id])
+  option     PollOption @relation(fields: [optionId], references: [id])
+  student    User     @relation(fields: [studentId], references: [id])
+
+  @@unique([pollId, studentId])
+  @@index([studentId])
+}
+
+model Doubt {
+  id         String   @id @default(uuid())
+  sessionId  String
+  studentId  String
+  content    String
+  isResolved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  session    Session  @relation(fields: [sessionId], references: [id])
+  student    User     @relation(fields: [studentId], references: [id])
+
+  @@index([sessionId])
+}
+
+model Feedback {
+  id         String   @id @default(uuid())
+  sessionId  String
+  studentId  String
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+  session    Session  @relation(fields: [sessionId], references: [id])
+  student    User     @relation(fields: [studentId], references: [id])
+
+  // @@check(rating >= 1 AND rating <= 5)
+  @@unique([sessionId, studentId])
+}
+
+model Report {
+  id            String   @id @default(uuid())
+  classId       String
+  sessionId     String?
+  teacherId     String
+  generatedAt   DateTime @default(now())
+  averageRating Float?
+  totalFeedback Int      @default(0)
+  totalAttendance Int    @default(0)
+  bonusAmount   Int?
+  class         Class    @relation(fields: [classId], references: [id])
+  session       Session? @relation(fields: [sessionId], references: [id])
+  teacher       User     @relation(fields: [teacherId], references: [id])
+
+  @@index([classId])
+  @@index([teacherId])
+}
+
+model Bonus {
+  id         String   @id @default(uuid())
+  teacherId  String
+  sessionId  String?
+  amount     Int
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+  teacher    User     @relation(fields: [teacherId], references: [id])
+  session    Session? @relation(fields: [sessionId], references: [id])
+
+  @@index([teacherId])
+}

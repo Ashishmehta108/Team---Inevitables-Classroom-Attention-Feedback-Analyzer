@@ -1,0 +1,35 @@
+Classroom Attention & Feedback Analyzer ER Diagram
+
+This is a placeholder text file with .png extension.
+Use this structure to draw the actual ER diagram in a tool like draw.io:
+
+Entities:
+- User (id, email, passwordHash, name, role, anonymousCode, createdAt, updatedAt)
+- Class (id, name, subject, teacherId, createdAt, updatedAt)
+- ClassEnrollment (id, classId, studentId, createdAt)
+- Session (id, classId, startsAt, endsAt, attendanceClosesAt, createdAt)
+- Attendance (id, sessionId, studentId, markedAt)
+- Poll (id, sessionId, teacherId, question, isActive, createdAt)
+- PollOption (id, pollId, text)
+- PollResponse (id, pollId, optionId, studentId, createdAt)
+- Doubt (id, sessionId, studentId, content, isResolved, createdAt)
+- Feedback (id, sessionId, studentId, rating, comment, createdAt)
+- Report (id, classId, sessionId, teacherId, generatedAt, averageRating, totalFeedback, totalAttendance, bonusAmount)
+- Bonus (id, teacherId, sessionId, amount, status, createdAt)
+
+Key relationships:
+- User 1-N Class (teacher -> classes)
+- User 1-N ClassEnrollment (student enrollments)
+- Class 1-N Session
+- Session 1-N Attendance
+- Session 1-N Poll
+- Poll 1-N PollOption
+- Poll 1-N PollResponse
+- Session 1-N Doubt
+- Session 1-N Feedback
+- Class / Session / User (teacher) 1-N Report
+- User (teacher) 1-N Bonus
+
+Anonymity:
+- Students are represented only by User.id and anonymousCode; admin/teacher reports never expose email/name for role=STUDENT.
+
