@@ -102,14 +102,7 @@ function App() {
                         Mark attendance, give feedback, and participate in polls
                       </p>
                     </div>
-                    <div className="w-full space-y-2">
-                      <Input
-                        placeholder="Enter existing code to sign in (optional)"
-                        value={existingStudentCode}
-                        onChange={(e) => setExistingStudentCode(e.target.value)}
-                        disabled={studentLoading}
-                      />
-                    </div>
+              
                     <Button className="w-full" disabled={studentLoading} onClick={handleStudentLogin}>
                       <LogIn className="w-4 h-4 mr-2" />
                       {existingStudentCode ? 'Sign in with Code' : 'Join as Student'}
