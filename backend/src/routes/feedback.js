@@ -61,5 +61,40 @@ router.get(
   }
 );
 
+// Admin gets feedback comments for a session (anonymous)
+router.get(
+  "/session/:sessionId/comments",
+  auth(),
+  requireRole("ADMIN"),
+  async (req, res, next) => {
+    try {
+      const { sessionId } = req.params;
+
+      const comments = await prisma.feedback.findMany({
+        where: {
+          sessionId,
+          comment: {
+            not: null
+          }
+        },
+        select: {
+          id: true,
+          rating: true,
+          comment: true,
+          createdAt: true
+        },
+        orderBy: {
+          createdAt: "desc"
+        }
+      });
+
+      res.json(comments);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+
 module.exports = router;
 
