@@ -57,7 +57,6 @@ app.get("/api/health", (req, res) => {
   res.json({ ok: true });
 });
 
-// Core API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/classes", classRoutes);
 app.use("/api/sessions", sessionRoutes);
