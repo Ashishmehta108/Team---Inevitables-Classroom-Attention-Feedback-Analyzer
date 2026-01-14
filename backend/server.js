@@ -26,7 +26,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "https://team-inevitables-classroom-attentio.vercel.app",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
   }
 });
@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.FRONTEND_ORIGIN || "http://localhost:3000",
+    origin:"https://team-inevitables-classroom-attentio.vercel.app",
     credentials: true
   })
 );
