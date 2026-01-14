@@ -173,7 +173,7 @@ export function StudentView({ token, studentCode }: StudentViewProps) {
                 </div>
                 <Button 
                   onClick={handleMarkAttendance} 
-                  disabled={attendanceTimeLeft === 0}
+                  disabled={!sessionId || !pollId}
                 >
                   Mark Present
                 </Button>
