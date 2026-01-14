@@ -1,4 +1,4 @@
-const DEFAULT_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:4000/api";
+const DEFAULT_BASE = process.env.NEXT_PUBLIC_API_BASE || "https://team-inevitables-classroom-attention.onrender.com/api";
 
 type FetchOptions = {
   method?: string;
