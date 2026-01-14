@@ -134,6 +134,22 @@ export async function listDoubts(
   return apiFetch(`/doubts/${sessionId}`, { token });
 }
 
+
+// Admin: get anonymous feedback comments for a session
+export async function getSessionComments(
+  token: string,
+  sessionId: string
+) {
+  return apiFetch<
+    Array<{
+      id: string;
+      rating: number;
+      comment: string;
+      createdAt: string;
+    }>
+  >(`/feedback/session/${sessionId}/comments`, { token });
+}
+
 export async function getTeacherReports(token: string) {
   return apiFetch<
     Array<{
