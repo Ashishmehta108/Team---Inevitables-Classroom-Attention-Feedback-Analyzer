@@ -229,28 +229,7 @@ export function StudentView({ token, studentCode }: StudentViewProps) {
         </Card>
 
         {/* Real-time Feedback */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MessageSquare className="w-5 h-5" />
-              Real-time Feedback & Doubts
-            </CardTitle>
-            <CardDescription>
-              Share specific doubts or questions about the topic (anonymous)
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Textarea
-              placeholder="E.g., I didn't understand the concept of slope-intercept form..."
-              value={doubtText}
-              onChange={(e) => setDoubtText(e.target.value)}
-              rows={4}
-            />
-            <Button onClick={handleRealTimeFeedback} disabled={!doubtText.trim()}>
-              Send Feedback
-            </Button>
-          </CardContent>
-        </Card>
+  
 
         {/* Post-class Feedback Toggle */}
         <Card>
